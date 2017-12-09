@@ -3,3 +3,6 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
+GET           /golden/:value                                                @controllers.Application.toGoldenProportionCode(value: Double)
+
+GET           /decimal/:value                                               @controllers.Application.toDecimal(value: String)
