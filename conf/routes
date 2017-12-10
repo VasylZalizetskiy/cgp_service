@@ -3,6 +3,22 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
-GET           /golden/:value                                                @controllers.GoldenController.getGoldenCode(value: Double)
+###
+# summary: Returns golden proportion code from decimal value
+# tags:
+#   - Golden
+###
+GET           /golden/:value                                                controllers.GoldenController.getGoldenCode(value: Double)
 
-GET           /decimal/:value                                               @controllers.GoldenController.getDecimal(value: String)
+###
+# summary: Returns decimal value from golden proportion code
+# tags:
+#   - Golden
+###
+GET           /decimal/:value                                               controllers.GoldenController.getDecimal(value: String)
+
+### NoDocs ###
+GET   /docs/swagger-ui/*file                                                controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
+
+### NoDocs ###
+GET   /docs/api.json                                                        controllers.swagger.ApiSpecs.specs

@@ -1,0 +1,12 @@
+---
+  swagger: "2.0"
+  info:
+    title: "Golden Proportion API"
+    version: "1.0.0"
+  consumes:
+    - application/json
+  produces:
+    - application/json
+  tags:
+    - name: Golden
+      description: Source of knowledge provides validation, suggestions and other information
