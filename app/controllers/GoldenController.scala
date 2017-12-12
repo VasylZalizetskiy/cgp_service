@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
+import forms.QueryForm
 import play.api.mvc._
 import services.GoldenService
 
@@ -9,18 +10,20 @@ class GoldenController @Inject()(goldenService: GoldenService) extends InjectedC
 
   private def key(els: String*) = els.mkString(".")
 
-  private val precision = 4
+  def getGoldenCode = Action(parse.form(QueryForm.getGoldenCodeQuery)) { request =>
+    val data = request.body
 
-  def getGoldenCode(value: Double) = Action {
-    val inaccurateCode = goldenService.getFastCode(value)
+    val inaccurateCode = goldenService.getFastCode(data.value)
     val temp = goldenService.getDecimal(inaccurateCode)
-    val accurateCode = goldenService.getAccurateCode(value - temp, precision)
+    val accurateCode = goldenService.getAccurateCode(data.value - temp, data.precision.getOrElse(20))
+    Ok(key(inaccurateCode, accurateCode))
 
-    Ok(key(inaccurateCode,accurateCode))
   }
 
-  def getDecimal(value: String) = Action {
-    val result = goldenService.getDecimal(value)
+  def getDecimal = Action(parse.form(QueryForm.getDecimalQuery)) { request =>
+    val data = request.body
+
+    val result = goldenService.getDecimal(data.code)
     Ok(result.toString)
   }
 

@@ -7,15 +7,33 @@
 # summary: Returns golden proportion code from decimal value
 # tags:
 #   - Golden
+# parameters:
+#   - name: value
+#     in: query
+#     type: number
+#     format: double
+#     required: true
+#     description: Decimal value
+#   - name: precision
+#     in: query
+#     type: integer
+#     format: int32
+#     description: Desired precision
 ###
-GET           /golden/:value                                                controllers.GoldenController.getGoldenCode(value: Double)
+GET           /golden                                                       controllers.GoldenController.getGoldenCode
 
 ###
 # summary: Returns decimal value from golden proportion code
 # tags:
 #   - Golden
+# parameters:
+#   - name: code
+#     in: query
+#     type: string
+#     required: true
+#     description: Golden proportion code
 ###
-GET           /decimal/:value                                               controllers.GoldenController.getDecimal(value: String)
+GET           /decimal                                                      controllers.GoldenController.getDecimal
 
 ### NoDocs ###
 GET   /docs/swagger-ui/*file                                                controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
