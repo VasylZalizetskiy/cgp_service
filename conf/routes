@@ -7,6 +7,7 @@
 # summary: Returns golden proportion code from decimal value
 # tags:
 #   - Golden
+# security: []
 # parameters:
 #   - name: value
 #     in: query
@@ -26,6 +27,7 @@ GET           /golden                                                       cont
 # summary: Returns decimal value from golden proportion code
 # tags:
 #   - Golden
+# security: []
 # parameters:
 #   - name: code
 #     in: query
