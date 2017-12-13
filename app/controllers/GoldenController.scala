@@ -14,10 +14,11 @@ class GoldenController @Inject()(goldenService: GoldenService) extends InjectedC
   def getGoldenCode = Action(parse.form(QueryForm.getGoldenCodeQuery)) { request =>
     val data = request.body
 
-    val inaccurateCode = goldenService.getFastCode(data.value)
-    val temp = goldenService.getDecimal(inaccurateCode)
-    val accurateCode = goldenService.getAccurateCode(data.value - temp, data.precision.getOrElse(20))
-    val result = key(inaccurateCode, accurateCode)
+    val result = data.precision.fold(goldenService.getFastCode(data.value)) { precision =>
+      val approximateCode = goldenService.getFastCode(data.value)
+      key(approximateCode, goldenService.getAccurateCode(data.value - goldenService.getDecimal(approximateCode), precision))
+    }
+
     Ok(Json.obj("code" -> result))
   }
 

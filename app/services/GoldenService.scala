@@ -18,13 +18,16 @@ class GoldenService {
   }
 
   def getAccurateCode(value: Double, precision: Int): String = {
-    var amount = 0.0
     var code = ""
-    var position = -1
-    while (amount < value && position >= -precision) {
-      val weightOfBit = pow(cgpBase, position)
-      if (amount + weightOfBit <= value) { amount += weightOfBit; code += '1' } else code += '0'
-      position-=1
+    if (precision > 0)
+    {
+      var amount = 0.0
+      var position = -1
+      while (amount < value && position >= -precision) {
+        val weightOfBit = pow(cgpBase, position)
+        if (amount + weightOfBit <= value) { amount += weightOfBit; code += '1' } else code += '0'
+        position-=1
+      }
     }
     code
   }
