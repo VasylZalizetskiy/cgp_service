@@ -12,23 +12,36 @@ class GoldenService {
     var code = ""
     for (position <- (0 to bitsCount).reverse) {
       val weightOfBit = pow(cgpBase, position)
-      if (amount + weightOfBit <= value) { amount += weightOfBit; code += '1' } else code += '0'
+      if (amount + weightOfBit <= value) {
+        amount += weightOfBit; code += '1'
+      } else code += '0'
     }
     code
   }
 
   def getAccurateCode(value: Double, precision: Int): String = {
     var code = ""
-    if (precision > 0)
-    {
-      var amount = 0.0
-      var position = -1
+    var amount = 0.0
+    var position = -1
+    if (precision > 0) {
       while (amount < value && position >= -precision) {
         val weightOfBit = pow(cgpBase, position)
-        if (amount + weightOfBit <= value) { amount += weightOfBit; code += '1' } else code += '0'
-        position-=1
+        if (amount + weightOfBit <= value) {
+          amount += weightOfBit; code += '1'
+        } else code += '0'
+        position -= 1
       }
     }
+    else if (precision == -1) {
+      while (amount < value) {
+        val weightOfBit = pow(cgpBase, position)
+        if (amount + weightOfBit <= value) {
+          amount += weightOfBit; code += '1'
+        } else code += '0'
+        position -= 1
+      }
+    }
+    else code += '0'
     code
   }
 
