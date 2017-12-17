@@ -4,7 +4,7 @@ import scala.math.{log, pow, sqrt, abs}
 
 class GoldenService {
 
-  val cgpBase = (1 + sqrt(5)) / 2
+  val cgpBase = BigDecimal((1 + sqrt(5)) / 2).setScale(14, BigDecimal.RoundingMode.HALF_DOWN).toDouble
 
   def getFastCode(value: Double): String = {
     val bitsCount = (log(value) / log(cgpBase)).toInt
@@ -20,9 +20,9 @@ class GoldenService {
   }
 
   def getAccurateCode(value: Double, precision: Int): String = {
+    var position = -1
     var code = ""
     var amount = 0.0
-    var position = -1
     if (precision > 0) {
       while (amount < value && position >= -precision) {
         val weightOfBit = pow(cgpBase, position)
