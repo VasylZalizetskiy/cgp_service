@@ -38,7 +38,4 @@ GET           /golden                                                       cont
 GET           /decimal                                                      controllers.GoldenProportionController.getDecimalValue
 
 ### NoDocs ###
-GET   /docs/swagger-ui/*file                                                controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
-
-### NoDocs ###
 GET   /docs/api.json                                                        controllers.swagger.ApiSpecs.specs
