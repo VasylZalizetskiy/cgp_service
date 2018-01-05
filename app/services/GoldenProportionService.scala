@@ -2,7 +2,7 @@ package services
 
 import scala.math.{log, pow, sqrt, abs}
 
-class GoldenService {
+class GoldenProportionService {
 
   val cgpBase = BigDecimal((1 + sqrt(5)) / 2).setScale(14, BigDecimal.RoundingMode.HALF_DOWN).toDouble
 

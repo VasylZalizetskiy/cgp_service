@@ -5,13 +5,13 @@ import javax.inject.Inject
 import forms.QueryForm
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.GoldenService
+import services.GoldenProportionService
 
-class GoldenController @Inject()(goldenService: GoldenService) extends InjectedController {
+class GoldenProportionController @Inject()(goldenService: GoldenProportionService) extends InjectedController {
 
   private def key(els: String*) = els.mkString(".")
 
-  def getGoldenCode = Action(parse.form(QueryForm.getGoldenCodeQuery)) { request =>
+  def getGoldenProportionCode = Action(parse.form(QueryForm.goldenCodeQuery)) { request =>
     val data = request.body
 
     val result = data.precision.fold(goldenService.getFastCode(data.value)) { precision =>
@@ -22,7 +22,7 @@ class GoldenController @Inject()(goldenService: GoldenService) extends InjectedC
     Ok(Json.obj("code" -> result))
   }
 
-  def getDecimal = Action(parse.form(QueryForm.getDecimalQuery)) { request =>
+  def getDecimalValue = Action(parse.form(QueryForm.decimalQuery)) { request =>
     val data = request.body
 
     val result = goldenService.getDecimal(data.code)
