@@ -29,4 +29,11 @@ class GoldenProportionController @Inject()(goldenService: GoldenProportionServic
     Ok(Json.obj("value" -> result))
   }
 
+  def getSummaryCode = Action(parse.form(QueryForm.summaryQuery)) { request =>
+    val data = request.body
+
+    val result = goldenService.getSummary(data.code1,data.code2)
+    Ok(Json.obj("code" -> result))
+  }
+
 }

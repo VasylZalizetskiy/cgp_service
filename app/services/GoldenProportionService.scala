@@ -1,19 +1,46 @@
 package services
 
-import scala.math.{log, pow, sqrt, abs}
+import scala.collection.mutable.ArrayBuffer
+import scala.math.{abs, log, pow, sqrt}
 
 class GoldenProportionService {
 
-  val cgpBase = BigDecimal((1 + sqrt(5)) / 2).setScale(14, BigDecimal.RoundingMode.HALF_DOWN).toDouble
+  private val cgpBase = BigDecimal((1 + sqrt(5)) / 2).setScale(14, BigDecimal.RoundingMode.HALF_DOWN).toDouble
+
+  private def fromJuniorBits[T](bits: Seq[T]) = bits.reverse
+
+  def getDecimal(code: String): Double = {
+    val codeParts = code.split('.')
+    val fastCode = fromJuniorBits(codeParts(0))
+    val fastBitsCount = fastCode.length
+    var fastAmount = 0.0
+    var accurateAmount = 0.0
+    for (position <- 0 until fastBitsCount) {
+      val weightOfBit = pow(cgpBase, position)
+      val temp = fastCode(position)
+      if (temp == '1') fastAmount += weightOfBit
+    }
+    if (codeParts.length == 2) {
+      val accurateCode = codeParts(1)
+      val accurateBitsCount = accurateCode.length
+      for (position <- -accurateBitsCount to -1) {
+        val weightOfBit = pow(cgpBase, position)
+        val temp = accurateCode(abs(position) - 1)
+        if (temp == '1') accurateAmount += weightOfBit
+      }
+    }
+    fastAmount + accurateAmount
+  }
 
   def getFastCode(value: Double): String = {
     val bitsCount = (log(value) / log(cgpBase)).toInt
     var amount = 0.0
     var code = ""
-    for (position <- (0 to bitsCount).reverse) {
+    for (position <- fromJuniorBits(0 to bitsCount)) {
       val weightOfBit = pow(cgpBase, position)
       if (amount + weightOfBit <= value) {
-        amount += weightOfBit; code += '1'
+        amount += weightOfBit
+        code += '1'
       } else code += '0'
     }
     code
@@ -27,7 +54,8 @@ class GoldenProportionService {
       while (amount < value && position >= -precision) {
         val weightOfBit = pow(cgpBase, position)
         if (amount + weightOfBit <= value) {
-          amount += weightOfBit; code += '1'
+          amount += weightOfBit
+          code += '1'
         } else code += '0'
         position -= 1
       }
@@ -36,7 +64,8 @@ class GoldenProportionService {
       while (amount < value) {
         val weightOfBit = pow(cgpBase, position)
         if (amount + weightOfBit <= value) {
-          amount += weightOfBit; code += '1'
+          amount += weightOfBit
+          code += '1'
         } else code += '0'
         position -= 1
       }
@@ -45,26 +74,32 @@ class GoldenProportionService {
     code
   }
 
-  def getDecimal(value: String): Double = {
-    val codeParts = value.split('.')
-    val bitsCount = codeParts(0).length
-    val code = codeParts(0).reverse
-    var amount = 0.0
-    var amount2 = 0.0
-    for (position <- 0 until bitsCount) {
-      val weightOfBit = pow(cgpBase, position)
-      val temp = code(position)
-      if (temp == '1') amount += weightOfBit
-    }
-    if (codeParts.length == 2) {
-      val bitsCount2 = codeParts(1).length
-      val code2 = codeParts(1)
-      for (position2 <- -bitsCount2 to -1) {
-        val weightOfBit = pow(cgpBase, position2)
-        val temp = code2(abs(position2) - 1)
-        if (temp == '1') amount2 += weightOfBit
+  def convolution(code: String): String = {
+    val codeParts = code.split('.')
+    val fastCode = fromJuniorBits(codeParts(0))
+    val fastBitsCount = fastCode.length
+    if (fastBitsCount > 1) {
+      var resultCode = ArrayBuffer[Char]()
+      var position = 0
+      while (position < fastBitsCount) {
+        val nextPosition = position + 1
+        val resPosition = nextPosition + 1
+        if (fastCode(position) == '1' && fastCode(nextPosition) == '1') {
+          resultCode.insert(position, '0','0','1')
+        }
+        else {
+          resultCode.insert(position, fastCode(position), fastCode(nextPosition), fastCode(resPosition))
+        }
+        position=resPosition
       }
+      resultCode.mkString
     }
-    amount + amount2
+    else code
+
   }
+
+  def getSummary(code1: String, code2: String): String = {
+    convolution(code1)
+  }
+
 }

@@ -4,6 +4,20 @@
 # ~~~~
 
 ###
+# summary: Returns decimal value from golden proportion code
+# tags:
+#   - Golden
+# security: []
+# parameters:
+#   - name: code
+#     in: query
+#     type: string
+#     required: true
+#     description: Golden proportion code
+###
+GET           /decimal                                                   controllers.GoldenProportionController.getDecimalValue
+
+###
 # summary: Returns golden proportion code from decimal value
 # tags:
 #   - Codes of golden proportion
@@ -24,18 +38,23 @@
 GET           /golden                                                       controllers.GoldenProportionController.getGoldenProportionCode
 
 ###
-# summary: Returns decimal value from golden proportion code
+# summary: Returns golden proportion code from decimal value
 # tags:
 #   - Codes of golden proportion
 # security: []
 # parameters:
-#   - name: code
+#   - name: code1
+#     in: query
+#     type: string
+#     required: true
+#     description: Golden proportion code
+#   - name: code2
 #     in: query
 #     type: string
 #     required: true
 #     description: Golden proportion code
 ###
-GET           /decimal                                                      controllers.GoldenProportionController.getDecimalValue
+GET           /golden-sum                                                controllers.GoldenProportionController.getSummaryCode
 
 ### NoDocs ###
-GET   /docs/api.json                                                        controllers.swagger.ApiSpecs.specs
+GET           /docs/api.json                                             controllers.swagger.ApiSpecs.specs
